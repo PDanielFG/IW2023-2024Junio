@@ -8,7 +8,13 @@ import java.util.Set;
 
 @Entity
 @Table(name = "table_user")
-public class User extends AbstractEntity {
+public class User{
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "idgenerator")
+    // The initial value is to account for data.sql demo data ids
+    @SequenceGenerator(name = "idgenerator", initialValue = 1000)
+    private Long id;
+
     private String username;
     private String name;
     private String email;
@@ -30,6 +36,12 @@ public class User extends AbstractEntity {
 
 
     //metodos getters y setters
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
     public String getUsername() {
         return username;
     }
@@ -66,6 +78,25 @@ public class User extends AbstractEntity {
     }
     public void setAllegados(List<Allegado> allegados) {
         this.allegados = allegados;
+    }
+
+    @Override
+    public int hashCode() {
+        if (getId() != null) {
+            return getId().hashCode();
+        }
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof User that)) {
+            return false; // null or not a User class
+        }
+        if (getId() != null) {
+            return getId().equals(that.getId());
+        }
+        return super.equals(that);
     }
 
 }
